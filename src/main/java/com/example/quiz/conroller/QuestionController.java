@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("questions")
+@RequestMapping("question")
 public class QuestionController {
 
     final QuestionService questionService;
@@ -22,18 +22,19 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
-    @GetMapping("question/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<Question> getQuestionById(@PathVariable Integer id) {
         return questionService.getQuestionById(id);
     }
-    @GetMapping("category/{category}")
-    public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable String category) {
-        return questionService.getQuestionsByCategory(category);
-    }
 
     @PostMapping("create")
-    public ResponseEntity<String> addQuestion(@RequestBody Question question) {
-        return questionService.addQuestion(question);
+    public ResponseEntity<Integer> createQuestion(@RequestBody Question question) {
+        return questionService.createQuestion(question);
+    }
+
+    @PostMapping("createMultiple")
+    public ResponseEntity<List<Integer>> createQuestions(@RequestBody List<Question> questions) {
+        return questionService.createQuestions(questions);
     }
 
     @PutMapping("update")
@@ -41,8 +42,23 @@ public class QuestionController {
         return questionService.updateQuestion(question);
     }
 
+    @PutMapping("update/{id}")
+    public ResponseEntity<String> updateQuestionById(@PathVariable Integer id, @RequestBody Question question) {
+        return questionService.updateQuestionById(id, question);
+    }
+
     @DeleteMapping("delete")
-    public ResponseEntity<String> removeQuestion(@RequestBody Question question) {
-        return questionService.removeQuestion(question);
+    public ResponseEntity<String> deleteQuestion(@RequestBody Question question) {
+        return questionService.deleteQuestion(question);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Question> deleteQuestionById(@PathVariable(name = "id") Integer id) {
+        return questionService.deleteQuestionById(id);
+    }
+
+    @DeleteMapping("deleteAll")
+    public ResponseEntity<String> deleteAllQuestions() {
+        return questionService.deleteAllQuestions();
     }
 }
