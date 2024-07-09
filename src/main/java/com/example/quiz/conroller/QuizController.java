@@ -1,10 +1,13 @@
 package com.example.quiz.conroller;
 
-import com.example.quiz.model.Question;
+import com.example.quiz.model.QuestionWithoutAnswer;
 import com.example.quiz.model.Quiz;
 import com.example.quiz.service.QuizService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("quiz")
@@ -24,9 +27,16 @@ public class QuizController {
         return quizService.createQuiz(quiz);
     }
 
-    @GetMapping("get/{quizId}")
-    public ResponseEntity<Quiz> getQuizById(@PathVariable(name = "quizId") Integer quizId) {
-        return quizService.getQuizById(quizId);
+    @GetMapping("get")
+    public ResponseEntity<List<QuestionWithoutAnswer>>
+    getQuizById(@RequestParam(name = "quizId", required = false) Integer quizId,
+                @RequestParam(name = "title", required = false) String title) {
+        if (quizId != null && (title == null || quizService.getQuizTitleById(quizId).equals(title))) {
+            return quizService.getQuizById(quizId);
+        }
+        if (title != null) {
+            return quizService.getQuizByTitle(title);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("update")
@@ -35,17 +45,17 @@ public class QuizController {
     }
 
     @DeleteMapping("delete/{quizId}")
-    public ResponseEntity<Quiz> deleteQuiz(@PathVariable(name = "quizId") Integer quizId) {
+    public ResponseEntity<List<QuestionWithoutAnswer>> deleteQuiz(@PathVariable(name = "quizId") Integer quizId) {
         return quizService.deleteQuiz(quizId);
     }
 
     @PutMapping("addQuestion/{quizId}")
-    public ResponseEntity<Quiz> addQuestion(@PathVariable(name = "quizId") Integer quizId, @RequestParam Integer questionId) {
+    public ResponseEntity<String> addQuestion(@PathVariable(name = "quizId") Integer quizId, @RequestParam(name = "questionId") Integer questionId) {
         return quizService.addQuestion(quizId, questionId);
     }
 
     @PutMapping("deleteQuestion/{quizId}")
-    public ResponseEntity<Quiz> deleteQuestion(@PathVariable(name = "quizId") Integer quizId, @RequestParam Integer questionId) {
+    public ResponseEntity<String> deleteQuestion(@PathVariable(name = "quizId") Integer quizId, @RequestParam(name = "questionId") Integer questionId) {
         return quizService.deleteQuestion(quizId, questionId);
     }
 
