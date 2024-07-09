@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @RequiredArgsConstructor
@@ -15,5 +15,5 @@ public class Quiz {
     private Integer Id;
     private String title;
     @ManyToMany
-    private List<Question> questions;
+    private Set<Question> questions;
 }
