@@ -23,7 +23,7 @@ public class QuestionController {
     }
 
     @GetMapping("get/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Integer id) {
+    public ResponseEntity<Question> getQuestionById(@PathVariable(name = "id") Integer id) {
         return questionService.getQuestionById(id);
     }
 
@@ -43,7 +43,7 @@ public class QuestionController {
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<String> updateQuestionById(@PathVariable Integer id, @RequestBody Question question) {
+    public ResponseEntity<String> updateQuestionById(@PathVariable(name = "id") Integer id, @RequestBody Question question) {
         return questionService.updateQuestionById(id, question);
     }
 
