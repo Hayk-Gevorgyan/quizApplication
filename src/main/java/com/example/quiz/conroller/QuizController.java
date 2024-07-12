@@ -1,5 +1,6 @@
 package com.example.quiz.conroller;
 
+import com.example.quiz.model.QuestionResponse;
 import com.example.quiz.model.QuestionWithoutAnswer;
 import com.example.quiz.model.Quiz;
 import com.example.quiz.service.QuizService;
@@ -39,14 +40,14 @@ public class QuizController {
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping("solve/{quizId}")
+    public ResponseEntity<String> solveQuiz(@PathVariable(name = "quizId") Integer quizId, @RequestBody List<QuestionResponse> answersList) {
+        return quizService.solveQuiz(quizId, answersList);
+    }
+
     @PutMapping("update")
     public ResponseEntity<Integer> updateQuiz(@RequestBody Quiz quiz) {
         return quizService.updateQuiz(quiz);
-    }
-
-    @DeleteMapping("delete/{quizId}")
-    public ResponseEntity<List<QuestionWithoutAnswer>> deleteQuiz(@PathVariable(name = "quizId") Integer quizId) {
-        return quizService.deleteQuiz(quizId);
     }
 
     @PutMapping("addQuestion/{quizId}")
@@ -59,5 +60,8 @@ public class QuizController {
         return quizService.deleteQuestion(quizId, questionId);
     }
 
-
+    @DeleteMapping("delete/{quizId}")
+    public ResponseEntity<List<QuestionWithoutAnswer>> deleteQuiz(@PathVariable(name = "quizId") Integer quizId) {
+        return quizService.deleteQuiz(quizId);
+    }
 }
